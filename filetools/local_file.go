@@ -7,12 +7,8 @@ import (
 	"os"
 )
 
-// 上传文件到本地
+// UploadFileToLocal 上传文件到本地
 func UploadFileToLocal(path string, r *http.Request) error {
-	// 检查请求方法
-	if r.Method != http.MethodPost {
-		return fmt.Errorf("方法不允许: 只允许POST方法")
-	}
 
 	// 从请求中解析文件
 	file, header, err := r.FormFile("file")
@@ -22,7 +18,8 @@ func UploadFileToLocal(path string, r *http.Request) error {
 	defer file.Close()
 
 	// 创建本地文件
-	localFile, err := os.Create(header.Filename)
+	filePath := fmt.Sprintf("%s%s%s", LocalFilePath, path, header.Filename)
+	localFile, err := os.Create(filePath)
 	if err != nil {
 		return fmt.Errorf("创建文件失败: %v", err)
 	}
